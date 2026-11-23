@@ -1,0 +1,106 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2907
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;\f2\froman\fcharset0 Times-Bold;
+\f3\froman\fcharset0 Times-Roman;\f4\froman\fcharset0 Times-Italic;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat0\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat0\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat0\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 No duplicate respondents, so no dedup needed.\
+ConvertedCompYearly is 51% missing and wildly skewed. Min is 1, max is 50,000,000, and the mean (~102K) is well above the median (~75K). Use the median, and flag the outliers.\
+JobSat is 46% missing. Scale is 0-10 (ordinal), so use Mann-Whitney U, not t-test.\
+OrgSize, RemoteWork, Country, AISelect and AIAcc are all 28-32% missing. Likely a skip pattern in the survey (people who didn\'92t see the question). Don\'92t fill these in. Just note it.\
+YearsCode and WorkExp are already numeric. Good, but we\'92ll check them for logic errors.\
+\
+\
+Age: 378 \'93Prefer not to say\'94 were set to missing. There\'92s no \'93Under 18\'94 group in this file, which is fine.\
+WorkExp > YearsCode: 3,564 rows (7%). That\'92s a logic error, because professional years can\'92t exceed total coding years. Keep these rows but exclude them from any experience-based analysis.\
+Young + 10+ years of experience: 48 rows. These are suspicious and flagged.\
+Salary outside $1K-$1M: 770 rows. They\'92re set to missing in comp_clean and the originals are kept.\
+\
+\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 ge vs AI usage
+\f0\b0 \
+\pard\tx220\tx720\pardeftab720\li720\fi-720\partightenfactor0
+\ls1\ilvl0\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Chi-square is huge (989.7) but 
+\f1\b Cram\'e9r\'92s V = 0.086, which is negligible to small
+\f0\b0 . The difference is real but weak. Say that in your README.\
+\ls1\ilvl0\kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 The pattern isn\'92t \'93younger = more AI.\'94 Daily use 
+\f1\b peaks at 25-34 (51.1%)
+\f0\b0  and drops to 
+\f1\b 22.3% at 65+
+\f0\b0 . At the same time, \'93no plan to use AI\'94 rises from 
+\f1\b 14.2% (25-34) to 35.9% (65+)
+\f0\b0 .\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\partightenfactor0
+\ls1\ilvl0
+\f1\b \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 15,471 rows have no 
+\fs26 AISelect
+\fs24  answer.
+\f0\b0  All percentages are based on respondents who answered. Note that base.\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b \cf0 Remote vs In-person job satisfaction
+\f0\b0 \
+\pard\tx220\tx720\pardeftab720\li720\fi-720\partightenfactor0
+\ls2\ilvl0\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Median 8 (n=7,908) vs 7 (n=3,496), p \uc0\u8776  1.9e-18. The gap is one point on a 0-10 scale. Add an effect size so it isn\'92t just a p-value (see the code below).\
+\pard\tx720\pardeftab720\partightenfactor0
+\cf0 \
+\
+\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\partightenfactor0
+\ls3\ilvl0
+\f2\b \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Raking worked.
+\f3\b0  Both margin tables match the targets exactly.\
+\ls3\ilvl0
+\f2\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Effective n = 23,345 out of 26,497 (88%).
+\f3\b0  Weighting cost you about 12% of your sample\'92s power, which is a mild, healthy cost.\
+\ls3\ilvl0
+\f2\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Weighted vs unweighted daily AI use: 47.8% vs 48.4%.
+\f3\b0  The weights barely changed the headline. That\'92s a valid finding: 
+\f4\i \'93results are robust to weighting.\'94
+\f3\i0 \
+\ls3\ilvl0
+\f2\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Rank-biserial r = -0.101.
+\f3\b0  The negative sign means Remote scored higher than In-person. At about 0.1 it\'92s a 
+\f2\b small effect
+\f3\b0 , right on the border of negligible. So remote workers are a bit more satisfied, but work mode explains very little.\
+\pard\tx720\pardeftab720\partightenfactor0
+
+\f0 \cf0 \strokec2 \
+\
+\
+# Changes Log\
+| Issue | Rule | Rows |\
+|---|---|---|\
+| Source file parse error (EOF in quoted string) | [what fixed it: re-download / etc.] | n/a |\
+| Duplicate Response Id | none found | 0 |\
+| Age = "Prefer not to say" | set to missing | [378] |\
+| WorkExp implies working before age 14 (using top of age bucket) | flagged, kept | [
+\fs22 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 119
+\fs24 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 ] |\
+| YearsCode implies coding before age 5 (using top of age bucket) | flagged, kept | [77] |\
+| Salary outside $1K-$1M | set to missing in comp_clean, original kept | [770] |\
+| High missingness (OrgSize, RemoteWork, Country, AISelect, AIAcc, JobSat) | not imputed, noted as likely survey skip pattern | n/a |\
+| Raking | illustrative targets, weights trimmed at 5x mean | n/a |\
+\
+Note: An earlier check (WorkExp > YearsCode) was removed. Professional experience\
+can legitimately exceed coding years (e.g. a tester or analyst who learned to\
+code later), so it is not an error. Replaced with age-based checks.\
+}

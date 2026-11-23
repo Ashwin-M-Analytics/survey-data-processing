@@ -1,0 +1,6 @@
+data/
+.ipynb_checkpoints/
+__pycache__/
+.DS_Store
+outputs/survey_clean.csv
+outputs/survey_weighted.csv
